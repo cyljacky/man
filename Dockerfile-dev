@@ -1,0 +1,9 @@
+FROM node:11.11-alpine
+
+ENV NODE_ENV=development
+
+EXPOSE 8081
+
+RUN npm install -g nodemon
+
+CMD [ "nodemon", "start" ]

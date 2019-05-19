@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  api:
+    image: ""
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+      - DEBUG=api-webserver:*
+      - PORT=80
+    networks: 
+      - api
+    container_name: api-webserver
+    restart: always
+    volumes:
+      - /var/log/api:/home/node/app/logs
+      # these lines are Linux-only, used to sync timezone
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - api-database
+
+  api-database:
+    image: "mariadb:10.3"
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_DATABASE=api
+      - MYSQL_USER=api
+      - MYSQL_PASSWORD=api-pw
+    restart: always
+    container_name: api-database
+    volumes:
+      - api:/var/lib/mysql
+      # these lines are Linux-only, used to sync timezone
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks: 
+      - api
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+
+volumes:
+  api-database:
+    name: api
+
+networks: 
+  api:
+    name: api

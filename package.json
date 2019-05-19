@@ -1,0 +1,25 @@
+{
+  "name": "man",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "npx sequelize db:migrate && node ./bin/www"
+  },
+  "dependencies": {
+    "axios": "~0.18.0",
+    "cookie-parser": "~1.4.3",
+    "cors": "~2.8.5",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "lodash": "~4.17.11",
+    "mariadb": "~2.0.3",
+    "moment": "^2.24.0",
+    "sequelize": "^5.8.0",
+    "sequelize-cli": "~5.4.0",
+    "winston": "~3.2.1",
+    "winston-daily-rotate-file": "~3.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "~1.18.10"
+  }
+}
