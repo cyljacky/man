@@ -1,0 +1,50 @@
+version: "3.7"
+
+services: # localhost (MasOS) use
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile-dev
+    user: "node"
+    working_dir: /home/node/app
+    container_name: api-webserver
+    environment:
+      - NODE_ENV=development
+      - DEBUG=api-webserver:*
+      # MacOS-only, hardcoded the timezone
+      - TZ=Asia/Hong_Kong
+    volumes:
+      - .:/home/node/app
+    ports:
+      - 80:80
+    command: ["nodemon", "./bin/www", "localhost", "80"]
+    depends_on:
+      - api-database
+    networks: 
+      - api
+
+  api-database:
+    image: "mariadb:10.3"
+    environment:
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_DATABASE=api
+      - MYSQL_USER=api
+      - MYSQL_PASSWORD=api-pw
+      # MacOS-only, hardcoded the timezone
+      - TZ=Asia/Hong_Kong
+    container_name: api-database
+    volumes:
+      - api:/var/lib/mysql
+    ports:
+      - 3306:3306
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    networks: 
+      - api
+
+volumes:
+  api-database:
+    name: api
+
+networks: 
+  api:
+    name: api
